@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opensnoop
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: opensnoop
+  template:
+    metadata:
+      labels:
+        app: opensnoop
+    spec:
+      hostPID: true
+      hostNetwork: true
+      containers:
+      - name: opensnoop
+        image: opensnoop:latest
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          privileged: true
+        volumeMounts:
+          - name: bpf
+            mountPath: /sys/fs/bpf
+          - name: proc
+            mountPath: /proc
+          - name: lib
+            mountPath: /lib
+      volumes:
+        - name: bpf
+          hostPath:
+            path: /sys/fs/bpf
+            type: Directory
+        - name: proc
+          hostPath:
+            path: /proc
+            type: Directory
+        - name: lib
+          hostPath:
+            path: /lib
+            type: Directory
