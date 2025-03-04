@@ -30,7 +30,8 @@ func main() {
 	// Optionally, set the kernel version if needed.
 	for _, progSpec := range spec.Programs {
 		if progSpec.Type == ebpf.Kprobe {
-			progSpec.KernelVersion = 0x051500 // e.g., for kernel 5.15.0; adjust as needed.
+			// For example, if running on 5.15.0:
+			progSpec.KernelVersion = 0x051500
 		}
 	}
 

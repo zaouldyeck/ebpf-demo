@@ -27,12 +27,14 @@ int trace_openat(struct pt_regs *ctx) {
     struct event evt = {};
     const char *filename;
 
-    // Use the lower 32 bits as a workaround (ARM64 verifier complains on shifting)
-    evt.pid = (u32)bpf_get_current_pid_tgid();
+    // On aarch64, use the lower 32 bits of bpf_get_current_pid_tgid()
+    // (this gives you the thread ID, which is a common workaround)
+    evt.pid = (u32) bpf_get_current_pid_tgid();
 
     bpf_get_current_comm(evt.comm, sizeof(evt.comm));
 
-    // On ARM64, syscall parameters are in the regs[] array; the second parameter is in regs[1]
+    // For aarch64, syscall arguments are stored in the regs[] array.
+    // The second argument (filename) is in regs[1].
     filename = (const char *)ctx->regs[1];
     bpf_probe_read_user_str(evt.filename, sizeof(evt.filename), filename);
 
