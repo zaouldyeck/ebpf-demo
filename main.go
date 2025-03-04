@@ -27,10 +27,10 @@ func main() {
 		log.Fatalf("failed to load collection spec: %v", err)
 	}
 
-	// Hardcode kernel version (e.g., 6.12.5 = 0x060c05)
+	// Optionally, set the kernel version if needed.
 	for _, progSpec := range spec.Programs {
 		if progSpec.Type == ebpf.Kprobe {
-			progSpec.KernelVersion = 0x060c05 // 6.12.5
+			progSpec.KernelVersion = 0x051500 // e.g., for kernel 5.15.0; adjust as needed.
 		}
 	}
 
